@@ -1,0 +1,3 @@
+note: You must use rotatable block to correct working of plugin.
+wp_default_block: FURNACE
+wp_default_icon: ENCHANTING_TABLE
