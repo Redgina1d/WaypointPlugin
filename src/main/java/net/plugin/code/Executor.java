@@ -42,8 +42,6 @@ import org.eclipse.sisu.inject.TypeArguments;
 
 public class Executor implements CommandExecutor {
 
-    private GlobalManager globalManager;
-
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		switch (label.toLowerCase()) {
@@ -55,43 +53,34 @@ public class Executor implements CommandExecutor {
 				return false;
 			}
 		}
-		case "narrate": {
+		case "cnms": {
 			if (args.length > 0) {
-				return narrate(sender, args);
+				return cnms(sender, args);
 			} else {
 				return false;
 			}
 		}
-		/// COMMANDS ///
 		default:
 			return false;
 		}
     }
-	/// COMMAND TO SAY SMTHG TO SENDER ///
-	private boolean narrate(CommandSender sender, String[] args) {
-		if (sender instanceof Player) {
-			Player player = (Player) sender;
-			if (player.isOnline())	{
-				if (args.length > 1) {
-					String message = String.join(" ", args).toString();
-					player.sendMessage(message);
-				} else {
-					String message = args.toString();
-					player.sendMessage(message);
-				}
-				return true;
-			} else {
-				return false;
-			}
-		}
+    private GlobalManager globalManager;
+    
+    private boolean cnms(CommandSender sender, String[] args) {
+    	Player player = (Player) sender;
+    	ConsoleCommandSender console = Bukkit.getConsoleSender();
+    	if (player.hasPermission("cnms.send")) {
+    		console.sendMessage(args);
+    	} else {return false;}
 		return false;
-	}
+    }
+    
 	/// COMMAND TO ASK FOR WAYPOINT CREATION ///
     private boolean wp(CommandSender sender, String[] args) {
     	Player player = (Player) sender;
         if (args[0] == "create") {
         	if (player.hasPermission("wp.create")) {
-        		String[] parsed_args = new String[10];
+        		Object[] parsed_args = new Object[10];
         		if (args[1] == null) {player.sendMessage("wp_err"); return false;} else {
         			parsed_args[0] = args[1];
         		}
@@ -101,69 +90,65 @@ public class Executor implements CommandExecutor {
         			parsed_args[1] = "front";
         		} else {player.sendMessage("wp_err"); return false;}
         		if (args[3] == "Default") {
-        			parsed_args[1] = "default";
-        			Object icon_cmd = null;
+        			parsed_args[2] = "default";
+        			parsed_args[3] = null;
         		} if (args[3] == "ItemInHand") {
         			if (player.getItemInHand().getType() != Material.AIR) {
         				ItemMeta meta = player.getItemInHand().getItemMeta();
             			Material icon = player.getItemInHand().getType();
+            			parsed_args[2] = icon;
             			if (meta.hasCustomModelData()) {
-            				Object icon_cmd = meta.getCustomModelData();
+            				parsed_args[3] = meta.getCustomModelData();
             			} else {
-            				Object icon_cmd = null;
+            				parsed_args[3] = null;
             			}
         			} else {player.sendMessage("wp_err"); return false;}
         			
         		} else {player.sendMessage("wp_err"); return false;}
         		if (args[4] == "north" || args[4] == "south" || args[4] == "west" || args[4] == "east") {
-        			String blockrotation = args[4];
+        			parsed_args[4] = args[4];
         		} else {player.sendMessage("wp_err"); return false;}
         		if (Bukkit.getWorld(args[5]) != null) {
         			String worldsString = args[5];
+        			parsed_args[5] = worldsString;
         			double world_x_and_z_limite = (Bukkit.getWorld(worldsString).getWorldBorder().getSize() / 2);
         			if (Integer.parseInt(args[6]) > 0 && (Integer.parseInt(args[6]) < world_x_and_z_limite) || Integer.parseInt(args[6]) < 0 && (Integer.parseInt(args[6]) < world_x_and_z_limite) ) {
-        				Object x_loc = (args[6]);
+        				parsed_args[6] = (args[6]);
         			} else {player.sendMessage("wp_err"); return false;}
         			if (Integer.parseInt(args[7]) > 0 && (Integer.parseInt(args[7]) < Bukkit.getWorld(args[5]).getMaxHeight()) || (Integer.parseInt(args[7]) < 0 && (Integer.parseInt(args[7]) < Bukkit.getWorld(args[5]).getMinHeight()))) {
-        				Object y_loc = (args[7]);
+        				parsed_args[7] = (args[7]);
         			} else {player.sendMessage("wp_err"); return false;}
         			if (Integer.parseInt(args[8]) > 0 && (Integer.parseInt(args[8]) < world_x_and_z_limite) || Integer.parseInt(args[8]) < 0 && (Integer.parseInt(args[8]) < world_x_and_z_limite) ) {
-        				Object z_loc = (args[8]);
+        				parsed_args[8] = (args[8]);
         			} else {player.sendMessage("wp_err"); return false;}
         		if (isDouble(args[9])) {
         			Double yay = Double.parseDouble(args[9]);
         			if (yay < 180 && yay > -180) {
-        				Object yaw = args[9];
+        				parsed_args[9] = args[9];
         			} else {player.sendMessage("wp_err"); return false;}
         		} else {player.sendMessage("wp_err"); return false;}
         		if (isDouble(args[10])) {
         			Double pit = Double.parseDouble(args[10]);
         			if (pit < 90 && pit > -90) {
-        				Object pitch = args[10];
+        				parsed_args[10] = args[10];
         			} else {player.sendMessage("wp_err"); return false;}
         		} else {player.sendMessage("wp_err"); return false;}
-        	}else {player.sendMessage("wp_err"); return false;}
-        		
+        		} else {player.sendMessage("wp_err"); return false;}
+        		byte m = 0;
+        		for (int i = 0; i < parsed_args.length; i++) {
+        			if (parsed_args[i] != null) {
+        				m++;
+        			}
+        		} if (m == 11) {
+        			return true;
+        		}
+        	}
+        } if (args[0] == "delete") {
+        	if (player.hasPermission("wp.delete")) {
         	
-        if (args[0] == "delete") {
-            if (player.hasPermission("wp.delete")) {
-            	
-            	return true;
-            }
-        } else {
-        	player.sendMessage("err_wp_unsufficient_args");
-			return false;
-        }
-    }
-		return false;
-        }
-    }
-    private boolean wpfinalcreate(CommandSender sender) {
-    	Player player = (Player) sender;
-    	if (player.hasPermission("myplugin.mycommand")) {
-    		return true;
-    	}
-    	return false;
+        	return true;
+        	} else {player.sendMessage("wp_err"); return false;}
+        } else {player.sendMessage("wp_err"); return false;}
     }
 
     /*
@@ -190,7 +175,7 @@ public class Executor implements CommandExecutor {
     }
     */
     // Sends a message to the command sender.
-    private void sendMessage(CommandSender sender, String message, MessageType type) {
+    public void sendMessage(CommandSender sender, String message, MessageType type) {
         Messenger.sendMessage(globalManager, sender, message, type);
     }
     public static boolean isDouble(String str) {
@@ -204,5 +189,6 @@ public class Executor implements CommandExecutor {
             return false;
         }
     }
+    
 
 }

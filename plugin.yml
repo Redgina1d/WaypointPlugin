@@ -1,0 +1,14 @@
+main: net.plugin.code.WaypointPlugin
+name: WaypointPlugin
+version: 1.0.0
+author: Rёdginald
+api-version: 1.13
+description: nulll
+website: nullll
+commands:
+  wpcreate:
+    description: Main command of the plugin.
+    usage: /wp
+  wpdelete:
+    description: Msg to console.
+    usage: /cnms

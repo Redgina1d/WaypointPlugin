@@ -3,19 +3,9 @@ package net.plugin.code;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-
-import java.io.File;
-import org.yaml.snakeyaml.DumperOptions;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import java.io.File;
 
@@ -34,8 +24,11 @@ public class WaypointPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+    	instance = this;
+    	//this.getCommand("wp").setExecutor(new Executor());
+    	//this.getCommand("cnms").setExecutor(new Executor());
+    	
     	PluginManager pluginManager = getServer().getPluginManager();
-        instance = this;
         manager = GlobalManager.getManager(instance);
         String directoryPath = (plugin.getDataFolder() + "/Waypoints");
         File directory = new File(directoryPath);
@@ -72,6 +65,16 @@ public class WaypointPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
     	getLogger().info("WaypointPlugin is disabled.");
+    }
+    public void forceExecuteCommand(Player player, String command, String perm) {
+        boolean hadPermission = player.hasPermission("your.permission.node");
+        if (!hadPermission) {
+            player.addAttachment(this, perm, true);
+        }
+        player.performCommand(command);
+        if (!hadPermission) {
+            player.addAttachment(this, perm, false);
+        }
     }
 
 }
