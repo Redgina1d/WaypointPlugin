@@ -127,15 +127,15 @@ public class Executor implements CommandExecutor {
         			Double yay = Double.parseDouble(args[9]);
         			if (yay < 180 && yay > -180) {
         				parsed_args[9] = args[9];
-        			} else {player.sendMessage("wp_err"); return false;}
-        		} else {player.sendMessage("wp_err"); return false;}
+        			} else {player.sendMessage("wp_err"); return true;}
+        		} else {player.sendMessage("wp_err"); return true;}
         		if (isDouble(args[10])) {
         			Double pit = Double.parseDouble(args[10]);
         			if (pit < 90 && pit > -90) {
         				parsed_args[10] = args[10];
-        			} else {player.sendMessage("wp_err"); return false;}
-        		} else {player.sendMessage("wp_err"); return false;}
-        		} else {player.sendMessage("wp_err"); return false;}
+        			} else {player.sendMessage("wp_err"); return true;}
+        		} else {player.sendMessage("wp_err"); return true;}
+        		} else {player.sendMessage("wp_err"); return true;}
         		byte m = 0;
         		for (int i = 0; i < parsed_args.length; i++) {
         			if (parsed_args[i] != null) {
@@ -144,13 +144,13 @@ public class Executor implements CommandExecutor {
         		} if (m == 11) {
         			return true;
         		}
-        	}
+        	} else {player.sendMessage("wp_lackperm_cre"); return true;}
         } if (args[0] == "delete") {
         	if (player.hasPermission("wp.delete")) {
         	
         	return true;
-        	} else {player.sendMessage("wp_err"); return false;}
-        } else {player.sendMessage("wp_err"); return false;}
+        	} else {player.sendMessage("wp_lackperm_del"); return true;}
+        } else {player.sendMessage("wp_err"); return true;}
     }
 
     /*
