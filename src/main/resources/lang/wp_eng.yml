@@ -1,0 +1,1 @@
+wp_err: "§c§lERROR: §cCommand misspelling. Usage: /wp <create/delete> <name> <SpawnOnTop/SpawnInFront> <Default/ItemInHand> <north/south/west/east> <world> <x location> <y location> <z location> <yaw> <pitch>."

@@ -6,9 +6,9 @@ api-version: 1.13
 description: nulll
 website: nullll
 commands:
-  wpcreate:
+  wp:
     description: Main command of the plugin.
     usage: /wp
-  wpdelete:
-    description: Msg to console.
+  cnms:
+    description: console mesage
     usage: /cnms

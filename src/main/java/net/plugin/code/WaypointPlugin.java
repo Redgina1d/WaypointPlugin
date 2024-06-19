@@ -17,41 +17,38 @@ public class WaypointPlugin extends JavaPlugin {
 
     public static WaypointPlugin getInstance() {
         return instance;
-    }
-    
-    private static WaypointPlugin plugin;
-    
+    }    
 
     @Override
     public void onEnable() {
-    	instance = this;
-    	//this.getCommand("wp").setExecutor(new Executor());
-    	//this.getCommand("cnms").setExecutor(new Executor());
-    	
-    	PluginManager pluginManager = getServer().getPluginManager();
+    instance = this;
+    instance.getCommand("wp").setExecutor(new Executor());
+    instance.getCommand("cnms").setExecutor(new Executor());
+    
+    PluginManager pluginManager = getServer().getPluginManager();
         manager = GlobalManager.getManager(instance);
-        String directoryPath = (plugin.getDataFolder() + "/Waypoints");
+        String directoryPath = (instance.getDataFolder() + "/Waypoints");
         File directory = new File(directoryPath);
         if (!directory.exists()) {
             boolean isCreated = directory.mkdirs();
         }
         Permission perm1 = pluginManager.getPermission("wp.create");
         if (perm1 == null) {
-        	Permission permcreate = new Permission("wp.create");
-        	permcreate.setDescription("Allows players to create waypoints using /wpcreate command.");
+        Permission permcreate = new Permission("wp.create");
+        permcreate.setDescription("Allows players to create waypoints using /wpcreate command.");
             getServer().getPluginManager().addPermission(permcreate);
             permcreate.setDefault(PermissionDefault.OP);
         }
         Permission perm2 = pluginManager.getPermission("wp.delete");
         if (perm2 == null) {
-        	Permission permdelete = new Permission("wp.delete");
-        	permdelete.setDescription("Allows players to delete existing waypoints using /wpdelete command.");
+        Permission permdelete = new Permission("wp.delete");
+        permdelete.setDescription("Allows players to delete existing waypoints using /wpdelete command.");
             getServer().getPluginManager().addPermission(permdelete);
             permdelete.setDefault(PermissionDefault.OP);
         }
         TabCompleter cmpltr = getCommand("wp").getTabCompleter();
         if (cmpltr == null) {
-        	getCommand("wp").setTabCompleter(new TabComplete());
+        getCommand("wp").setTabCompleter(new TabComplete());
         }
         getLogger().info("WaypointPlugin is enabled.");
     }
@@ -64,7 +61,7 @@ public class WaypointPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-    	getLogger().info("WaypointPlugin is disabled.");
+    getLogger().info("WaypointPlugin is disabled.");
     }
     public void forceExecuteCommand(Player player, String command, String perm) {
         boolean hadPermission = player.hasPermission("your.permission.node");

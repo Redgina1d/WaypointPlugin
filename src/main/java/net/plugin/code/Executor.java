@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.print.CancelablePrintJob;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -71,8 +73,8 @@ public class Executor implements CommandExecutor {
     	ConsoleCommandSender console = Bukkit.getConsoleSender();
     	if (player.hasPermission("cnms.send")) {
     		console.sendMessage(args);
-    	} else {return false;}
-		return false;
+    	} else {return true;}
+		return true;
     }
     
 	/// COMMAND TO ASK FOR WAYPOINT CREATION ///
@@ -81,14 +83,14 @@ public class Executor implements CommandExecutor {
         if (args[0] == "create") {
         	if (player.hasPermission("wp.create")) {
         		Object[] parsed_args = new Object[10];
-        		if (args[1] == null) {player.sendMessage("wp_err"); return false;} else {
+        		if (args[1] == null) {player.sendMessage("wp_err"); return true;} else {
         			parsed_args[0] = args[1];
         		}
         		if (args[2] == "SpawnOnTop")	{
         			parsed_args[1] = "top";
         		} if (args[2] == "SpawnInFromt") {
         			parsed_args[1] = "front";
-        		} else {player.sendMessage("wp_err"); return false;}
+        		} else {player.sendMessage("wp_err"); return true;}
         		if (args[3] == "Default") {
         			parsed_args[2] = "default";
         			parsed_args[3] = null;
@@ -102,25 +104,25 @@ public class Executor implements CommandExecutor {
             			} else {
             				parsed_args[3] = null;
             			}
-        			} else {player.sendMessage("wp_err"); return false;}
+        			} else {player.sendMessage("wp_err"); return true;}
         			
-        		} else {player.sendMessage("wp_err"); return false;}
+        		} else {player.sendMessage("wp_err"); return true;}
         		if (args[4] == "north" || args[4] == "south" || args[4] == "west" || args[4] == "east") {
         			parsed_args[4] = args[4];
-        		} else {player.sendMessage("wp_err"); return false;}
+        		} else {player.sendMessage("wp_err"); return true;}
         		if (Bukkit.getWorld(args[5]) != null) {
         			String worldsString = args[5];
         			parsed_args[5] = worldsString;
         			double world_x_and_z_limite = (Bukkit.getWorld(worldsString).getWorldBorder().getSize() / 2);
         			if (Integer.parseInt(args[6]) > 0 && (Integer.parseInt(args[6]) < world_x_and_z_limite) || Integer.parseInt(args[6]) < 0 && (Integer.parseInt(args[6]) < world_x_and_z_limite) ) {
         				parsed_args[6] = (args[6]);
-        			} else {player.sendMessage("wp_err"); return false;}
+        			} else {player.sendMessage("wp_err"); return true;}
         			if (Integer.parseInt(args[7]) > 0 && (Integer.parseInt(args[7]) < Bukkit.getWorld(args[5]).getMaxHeight()) || (Integer.parseInt(args[7]) < 0 && (Integer.parseInt(args[7]) < Bukkit.getWorld(args[5]).getMinHeight()))) {
         				parsed_args[7] = (args[7]);
-        			} else {player.sendMessage("wp_err"); return false;}
+        			} else {player.sendMessage("wp_err"); return true;}
         			if (Integer.parseInt(args[8]) > 0 && (Integer.parseInt(args[8]) < world_x_and_z_limite) || Integer.parseInt(args[8]) < 0 && (Integer.parseInt(args[8]) < world_x_and_z_limite) ) {
         				parsed_args[8] = (args[8]);
-        			} else {player.sendMessage("wp_err"); return false;}
+        			} else {player.sendMessage("wp_err"); return true;}
         		if (isDouble(args[9])) {
         			Double yay = Double.parseDouble(args[9]);
         			if (yay < 180 && yay > -180) {
