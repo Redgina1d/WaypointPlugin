@@ -144,12 +144,12 @@ public class Executor implements CommandExecutor {
         		} if (m == 11) {
         			return true;
         		}
-        	} else {player.sendMessage("wp_lackperm_cre"); return true;}
+        	} else {player.sendMessage("lingo_err_not_have_permission"); return true;}
         } if (args[0] == "delete") {
         	if (player.hasPermission("wp.delete")) {
         	
         	return true;
-        	} else {player.sendMessage("wp_lackperm_del"); return true;}
+        	} else {player.sendMessage("lingo_err_not_have_permission"); return true;}
         } else {player.sendMessage("wp_err"); return true;}
     }
 
